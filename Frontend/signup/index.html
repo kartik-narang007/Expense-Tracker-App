@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <form class="signup-form">
+        <form class="signup-form" id="form">
             <h1 class="field-title">Please Sign-Up to Proceed!</h1>
             <div class="input-field">
                 <label for="username">Your Username</label>
@@ -17,14 +17,17 @@
             <div class="input-field">
                 <label for="email">E-mail</label>
                 <input type="text" placeholder="E-mail" name="email" id="email">
+                <div id="warning-message" class="warning-message">This email is already in use.</div>
             </div>
             <div class="input-field">    
                 <label for="password">Enter Password</label>
                 <input type="password" placeholder="password" name="password" id="password">
             </div>
-            <button type="submit">Sign Up</button>
+            <button type="submit" id="btn">Sign Up</button>
+            <button><a href="../signin/index.html">Already A User?</a></button>
         </form>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
