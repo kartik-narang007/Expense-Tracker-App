@@ -22,20 +22,26 @@ const passNotFound = document.getElementById('warning-message-pass');
 
 let msg;
 
-async function getLoginData(){
+async function getLoginData(e){
+    e.preventDefault();
     const data = {
-        email: email,
-        password: password
+        email: email.value,
+        password: password.value
     }
-    const response = await axios.post(`http://localhost:3000/getLogin`, data);
-    response = response.text();
-    msg = response;
-    if(msg === 'Email Not Found'){
-        emailNotFound.classList.add('show');
-    }else if(msg === 'Pass Not Found'){
-        passNotFound.classList.add('show');
-    }else{
-        console.log('Logged In Successfully');
+    try{
+        const response = await axios.post("http://localhost:3000/getLogin",data);
+        console.log(response);
+        msg = response.data;
+        console.log(msg)
+        if(msg === 'Email Not Found'){
+            emailNotFound.classList.add('show');
+        }else if(msg === 'Pass Not Found'){
+            passNotFound.classList.add('show');
+        }else{
+            console.log('Logged In Successfully');
+        }
+    }catch(err){
+        console.log(err);
     }
 }
 

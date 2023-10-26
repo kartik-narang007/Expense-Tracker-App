@@ -32,3 +32,23 @@ exports.validateEmail = async (req,res)=>{
         res.status(500).json({err: err.message});
     }
 }
+
+exports.getLogin = async(req,res)=>{
+    console.log(req.body);
+    const email = req.body.email;
+    const password = req.body.password;
+
+    try{
+    const userEmail = await(user.findOne({where:{email}}));
+    if(!userEmail){
+        res.send('Email Not Found');
+    }
+    if(userEmail.password != password){
+        res.send('Pass Not Found');
+    }    
+    res.send('Logged In Successfully');    
+
+    }catch(err){
+        console.log(err);
+    }
+}
