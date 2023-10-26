@@ -33,7 +33,9 @@ const submit = async (e) =>{
     try{
         console.log(mydata);
         const response = await axios.post("http://localhost:3000/user-signup",mydata);
-        
+        if(response.status === 201){
+            window.location.href = "../signin/index.html";
+        }
     }catch(err){
         console.log(err);
     }
@@ -63,6 +65,7 @@ const validateEmail = async () => {
     }else{
         warningMessage.classList.remove('show');
     }
+
 }
 
 email.addEventListener('input', ()=>{

@@ -30,14 +30,18 @@ async function getLoginData(e){
     }
     try{
         const response = await axios.post("http://localhost:3000/getLogin",data);
-        console.log(response);
         msg = response.data;
         console.log(msg)
         if(msg === 'Email Not Found'){
             emailNotFound.classList.add('show');
-        }else if(msg === 'Pass Not Found'){
+        }
+        if(msg === 'Pass Not Found'){
+            emailNotFound.classList.remove('show');
             passNotFound.classList.add('show');
-        }else{
+        }
+        if(msg === 'Logged In Successfully'){
+            emailNotFound.classList.remove('show');
+            passNotFound.classList.remove('show');
             console.log('Logged In Successfully');
         }
     }catch(err){
