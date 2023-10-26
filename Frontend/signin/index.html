@@ -12,11 +12,13 @@
             <h1 class="field-title">Login Here</h1>
             <div class="input-field">
                 <label for="email">E-mail</label>
-                <input type="text" placeholder="E-mail" name="email" id="email">
+                <input type="text" placeholder="E-mail" name="email" id="email" required>
+                <div class="warning-message" id="warning-message-email">Email doesn't exists</div>
             </div>
             <div class="input-field">    
                 <label for="password">Enter Password</label>
-                <input type="password" placeholder="password" name="password" id="password">
+                <input type="password" placeholder="password" name="password" id="password" required>
+                <div class="warning-message" id="warning-message-pass">Email doesn't exists</div>
             </div>
             <button type="submit" id="btn">Login</button>
             <button><a href="../signin/index.html">Not A User?</a></button>

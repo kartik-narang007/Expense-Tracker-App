@@ -13,45 +13,31 @@ for (var i = 0; i < inputs.length; i++) {
 
 //post User
 
-const username = document.getElementById('username');
+
 const email = document.getElementById('email');
 const password = document.getElementById('password');
 const button = document.getElementById('btn');
-const form = document.getElementById('form');
-// email.addEventListener('input', validateEmail);
+const emailNotFound = document.getElementById('warning-message-email');
+const passNotFound = document.getElementById('warning-message-pass');
 
-// const validateEmail = async()=>{
+let msg;
 
-//     const emailValue = email.value;
-
-//     try{
-
-//     }catch(err){
-
-//     }
-
-// }
-const submit = async (e) =>{
-    e.preventDefault();
-    console.log('button clicked');
-    const mydata = {
-        name: username.value,
-        email: email.value,
-        password: password.value
+async function getLoginData(){
+    const data = {
+        email: email,
+        password: password
     }
-    try{
-        console.log(mydata);
-        const response = await axios.post("http://localhost:3000/user-signup",mydata);
-        
-    }catch(err){
-        console.log(err);
+    const response = await axios.post(`http://localhost:3000/getLogin`, data);
+    response = response.text();
+    msg = response;
+    if(msg === 'Email Not Found'){
+        emailNotFound.classList.add('show');
+    }else if(msg === 'Pass Not Found'){
+        passNotFound.classList.add('show');
+    }else{
+        console.log('Logged In Successfully');
     }
-    
-
 }
 
-// const validateEmail = (e)=>{
-    
-// }
 
-form.addEventListener('submit', submit);
+button.addEventListener('click', getLoginData);

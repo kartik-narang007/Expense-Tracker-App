@@ -74,3 +74,17 @@ button a{
     text-decoration: none;
     color: white;
 }
+
+.warning-message {
+    display: none;
+    color: #ff0000; /* Red color for the warning message */
+    font-size: 14px;
+    margin-top: 5px;
+    transition: opacity 0.5s; /* Add a transition for opacity */
+}
+
+/* Add a fade-in effect for the warning message */
+.warning-message.show {
+    display: block;
+    opacity: 1;
+}
