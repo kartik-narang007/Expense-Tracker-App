@@ -11,7 +11,6 @@ exports.postUserSignUp = async(req,res)=>{
         const name =  req.body.name;
         const email =  req.body.email;
         const password =  req.body.password;
-        console.log(name,email,password);
         bcrypt.hash(password, 10, async (err,hash)=>{
             console.log(err);
             await user.create({name, email, password : hash});
@@ -28,7 +27,6 @@ exports.validateEmail = async (req,res)=>{
         const email = req.params.email;
         console.log(email);
         const exists = await User.findOne({ where: { email: { [Op.like]: '%' + email + '%' } } });
-        console.log(exists);
         res.json({available:exists});
     }catch(err){
         console.log(err);
@@ -37,7 +35,7 @@ exports.validateEmail = async (req,res)=>{
 }
 
 exports.getLogin = async(req,res)=>{
-    console.log(req.body);
+   
     const email = req.body.email;
     const password = req.body.password;
 
@@ -46,10 +44,9 @@ exports.getLogin = async(req,res)=>{
         if(userEmail){
             bcrypt.compare(password, userEmail.password, (err,result)=>{
                 if(result){
-                    console.log(result);
-                    res.send('Logged In Successfully');
+                    res.status(200).send(`<script>alert('Login Successful!')</script>`);
                 }else{
-                    res.send('Pass Not Found')
+                    res.send('Pass Not Found');
                 }
             })
         }else{
