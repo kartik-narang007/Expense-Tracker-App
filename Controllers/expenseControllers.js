@@ -17,7 +17,8 @@ exports.addExpense = async (req,res,next)=>{
         date: date,
         category: category,
         description: description,
-        amount: amount
+        amount: amount,
+        userId: req.user.id
     })
     res.status(200);
     res.redirect("/getHomePage");
@@ -27,8 +28,11 @@ exports.addExpense = async (req,res,next)=>{
 }
 
 exports.getAllExpenses = async (req, res, next) => {
+    console.log(req.user);
+    const userId = req.user.id;
+    console.log(userId);
     try{
-        const expenses = await Expense.findAll();
+        const expenses = await Expense.findAll({where:{userId: userId}});
         res.json(expenses)
     }catch(err){
         console.log(err);

@@ -4,7 +4,6 @@ const categoryBtn = document.querySelector('#categoryBtn');
 const form = document.getElementById('form1');
 const addExpenseBtn = document.getElementById('submitBtn');
 const table = document.getElementById('tbodyId');
-
 //added category selection in dropdown menu and storing selected category
 
 categoryItems.forEach((item)=>{
@@ -54,13 +53,14 @@ async function addExpense(){
         console.log(dateStr);
 
         //storing it in database
-
+        const token = localStorage.getItem("token");
         const res = await axios.post("http://localhost:3000/addExpense",{
             date: dateStr,
             category: categoryValue,
             description: descriptionValue,
-            amount: parseInt(amountValue)
-        }).then((res)=>{
+            amount: parseInt(amountValue),
+            // userId: req.user.id
+        },{headers: {Authorization: token}}).then((res)=>{
             if(res.status == 200){
                 window.location.reload();
             }
@@ -78,7 +78,9 @@ addExpenseBtn.addEventListener('click', addExpense);
 
 async function getAllExpenses() {
     try {
-      const res = await axios.get("http://localhost:3000/getAllExpenses");
+      const token = localStorage.getItem("token");
+      console.log(token);
+      const res = await axios.get(`http://localhost:3000/getAllExpenses/`, {headers : {Authorization: token}});
       const table = document.getElementById("tbodyId");
       console.log(res.data);
   
@@ -120,7 +122,7 @@ async function deleteExpense(e) {
         if(e.target.classList.contains('delete')){
             let tr = e.target.parentElement.parentElement;
             let id = tr.children[0].textContent;
-            const res = await axios.get(`http://localhost:3000/deleteExpense/${id}`);
+            const res = await axios.get(`http://localhost:3000/deleteExpense/${id}`, { headers: { Authorization: token }});
             window.location.reload();
         }
     }catch(err){
@@ -140,7 +142,7 @@ async function editExpense(e) {
         let id = tr.children[0].textContent;
         //Fill the input values with the existing values
         const res = await axios.get(
-          "http://localhost:3000/getAllExpenses"
+          "http://localhost:3000/getAllExpenses",{ headers: { Authorization: token } }
         );
         res.data.forEach((expense) => {
         console.log(res.data);
@@ -163,7 +165,8 @@ async function editExpense(e) {
                   category: categoryValue.textContent.trim(),
                   description: descriptionValue.value,
                   amount: amountValue.value,
-                }
+                },
+                { headers: { Authorization: token } }
               );
               window.location.reload();
             });

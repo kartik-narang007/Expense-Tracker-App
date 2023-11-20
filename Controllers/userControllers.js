@@ -1,8 +1,19 @@
-const User = require('../Model/User');
 const user = require('../Model/User');
 const { Op } = require('sequelize');
 const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
+const path = require("path");
 
+function generateAccessToken(id,email){
+    return jwt.sign(
+        {userid: id, email: email},
+        "secretKey"
+    );
+};
+
+exports.getLoginPage = (req,res,next)=>{
+    res.sendFile(path.join(__dirname, "../","Frontend","signin", "index.html"));
+};
 
 exports.postUserSignUp = async(req,res)=>{
 
@@ -44,7 +55,11 @@ exports.getLogin = async(req,res)=>{
         if(userEmail){
             bcrypt.compare(password, userEmail.password, (err,result)=>{
                 if(result){
-                    res.status(200).send(`<script>alert('Login Successful!')</script>`);
+                    res.status(200).json({
+                        success: true,
+                        message: "Login Successful",
+                        token: generateAccessToken(userEmail.id, userEmail.email)
+                    });
                 }else{
                     res.send('Pass Not Found');
                 }

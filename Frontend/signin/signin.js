@@ -39,10 +39,14 @@ async function getLoginData(e){
             passNotFound.classList.add('show');
         }
         if(response.status == 200){
+            localStorage.setItem("token", response.data.token);
+            console.log(response.data.token);
             emailNotFound.classList.remove('show');
             passNotFound.classList.remove('show');
             console.log('Logged In Successfully');
-            window.location.href = '../Expense-Details/index.html';
+            const userId = response.data;
+            console.log(userId);
+            window.location.href = 'http://localhost:3000/getHomePage';
         }
     }catch(err){
         console.log(err);
