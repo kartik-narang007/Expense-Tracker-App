@@ -28,9 +28,9 @@ exports.addExpense = async (req,res,next)=>{
 }
 
 exports.getAllExpenses = async (req, res, next) => {
-    console.log(req.user);
     const userId = req.user.id;
     console.log(userId);
+    console.log("Entered in getAllExpenses Controller")
     try{
         const expenses = await Expense.findAll({where:{userId: userId}});
         res.json(expenses)

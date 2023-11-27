@@ -4,6 +4,9 @@ const categoryBtn = document.querySelector('#categoryBtn');
 const form = document.getElementById('form1');
 const addExpenseBtn = document.getElementById('submitBtn');
 const table = document.getElementById('tbodyId');
+const buyPremiumBtn = document.getElementById("rzp-button1");
+const reportsLink = document.getElementById("reportsLink");
+const leaderboardLink = document.getElementById("leaderboardLink");
 //added category selection in dropdown menu and storing selected category
 
 categoryItems.forEach((item)=>{
@@ -77,10 +80,11 @@ async function addExpense(){
 addExpenseBtn.addEventListener('click', addExpense);
 
 async function getAllExpenses() {
+    console.log("function called");
     try {
       const token = localStorage.getItem("token");
       console.log(token);
-      const res = await axios.get(`http://localhost:3000/getAllExpenses/`, {headers : {Authorization: token}});
+      const res = await axios.get(`http://localhost:3000/getAllExpenses`, {headers : {Authorization: token}});
       const table = document.getElementById("tbodyId");
       console.log(res.data);
   
@@ -115,7 +119,7 @@ async function getAllExpenses() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", getAllExpenses);
+
 
 async function deleteExpense(e) {
     try{
@@ -185,3 +189,46 @@ table.addEventListener('click', (e)=>{
 table.addEventListener('click', (e)=>{
     editExpense(e);
 })
+
+
+async function buyPremium(e){
+  const token = localStorage.getItem('token');
+  const response = await axios.get('http://localhost:3000/purchase/premiummembership', {headers:{"Authorization": token}});
+  console.log(response);
+  var options = {
+    key: response.data.key_id,
+    order_id: response.data.order.id,
+    handler: async function(response){
+      console.log(localStorage.getItem("token"));
+      const res = await axios.post('http://localhost:3000/purchase/updatetransactionstatus', {
+        order_id: options.order_id,
+        payment_id: response.razorpay_payment_id,
+      },  { headers: {Authorization: token} })
+      alert('You are a premium user now');
+      console.log(res);
+      localStorage.setItem("token", res.data.token);
+      window.location.reload()
+    }
+  };
+  const rzp1 = new Razorpay(options);
+  rzp1.open();
+  e.preventDefault();
+};
+
+
+async function isPremiumUser(){
+  const token = localStorage.getItem("token");
+  const res = await axios.get("http://localhost:3000/isPremiumUser",{headers:{Authorization:token}});
+  if(res.data.isPremiumUser){
+      buyPremiumBtn.innerHTML = "Premium Member &#128081";
+      buyPremiumBtn.removeEventListener("click", buyPremium);
+      reportsLink.removeAttribute("onclick");
+      leaderboardLink.removeAttribute("onclick");   
+  }
+}
+
+buyPremiumBtn.addEventListener("click", buyPremium);
+document.addEventListener("DOMContentLoaded", () => {
+  isPremiumUser();
+  getAllExpenses();
+});

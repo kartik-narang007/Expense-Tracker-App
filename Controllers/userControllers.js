@@ -11,11 +11,17 @@ function generateAccessToken(id,email){
     );
 };
 
-exports.getLoginPage = (req,res,next)=>{
+function isPremiumUser(req, res, next){
+    if (req.user.isPremiumUser) {
+      return res.json({ isPremiumUser: true });
+    }
+  };
+
+function getLoginPage(req,res,next){
     res.sendFile(path.join(__dirname, "../","Frontend","signin", "index.html"));
 };
 
-exports.postUserSignUp = async(req,res)=>{
+async function postUserSignUp(req,res){
 
     console.log(req.body);
     try{
@@ -33,11 +39,11 @@ exports.postUserSignUp = async(req,res)=>{
     }
 }
 
-exports.validateEmail = async (req,res)=>{
+async function validateEmail(req,res){
     try{
         const email = req.params.email;
         console.log(email);
-        const exists = await User.findOne({ where: { email: { [Op.like]: '%' + email + '%' } } });
+        const exists = await user.findOne({ where: { email: { [Op.like]: '%' + email + '%' } } });
         res.json({available:exists});
     }catch(err){
         console.log(err);
@@ -45,14 +51,15 @@ exports.validateEmail = async (req,res)=>{
     }
 }
 
-exports.getLogin = async(req,res)=>{
+async function getLogin(req,res){
    
     const email = req.body.email;
     const password = req.body.password;
 
     try{
-        const userEmail = await(user.findOne({where:{email}}));
+        const userEmail = await(user.findOne({where:{email:email}}));
         if(userEmail){
+            console.log(userEmail);
             bcrypt.compare(password, userEmail.password, (err,result)=>{
                 if(result){
                     res.status(200).json({
@@ -60,12 +67,13 @@ exports.getLogin = async(req,res)=>{
                         message: "Login Successful",
                         token: generateAccessToken(userEmail.id, userEmail.email)
                     });
+                
                 }else{
-                    res.send('Pass Not Found');
+                    res.status(401).send('Pass Not Found');
                 }
             })
         }else{
-            res.send('Email Not Found');
+            res.status(404).send('Email Not Found');
         }
         // if(userEmail.password != password){
         //     res.send('Pass Not Found');
@@ -74,4 +82,13 @@ exports.getLogin = async(req,res)=>{
     }catch(err){
         console.log(err);
     }
+}
+
+module.exports = {
+    generateAccessToken,
+    getLogin,
+    getLoginPage,
+    postUserSignUp,
+    validateEmail,
+    isPremiumUser
 }

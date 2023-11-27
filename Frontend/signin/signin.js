@@ -31,10 +31,10 @@ async function getLoginData(e){
     try{
         const response = await axios.post("http://localhost:3000/getLogin",data);
         msg = response.data;
-        if(msg === 'Email Not Found'){
+        if(response.status == 404){
             emailNotFound.classList.add('show');
         }
-        if(msg === 'Pass Not Found'){
+        if(response.status == 401){
             emailNotFound.classList.remove('show');
             passNotFound.classList.add('show');
         }
@@ -46,7 +46,7 @@ async function getLoginData(e){
             console.log('Logged In Successfully');
             const userId = response.data;
             console.log(userId);
-            window.location.href = 'http://localhost:3000/getHomePage';
+            window.location.href = '/getHomePage';
         }
     }catch(err){
         console.log(err);
