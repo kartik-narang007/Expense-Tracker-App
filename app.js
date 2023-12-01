@@ -5,7 +5,7 @@ require('dotenv').config();
 const userRoutes = require('./Routes/userRoutes');
 const expenseRoutes = require('./Routes/expenseRoutes');
 const purchaseRoutes = require('./Routes/purchaseRoutes');
-
+const leaderboardRoutes = require('./Routes/leaderboardRoutes');
 const sequelize = require('./Utils/Database');
 
 const cors = require('cors');
@@ -26,6 +26,7 @@ app.use(userRoutes);
 app.use("/getHomePage", expenseRoutes);
 app.use(expenseRoutes);
 app.use('/purchase', purchaseRoutes);
+app.use('/premium', leaderboardRoutes);
 user.hasMany(expenses);
 expenses.belongsTo(user);
 

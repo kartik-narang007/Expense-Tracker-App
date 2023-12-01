@@ -123,6 +123,7 @@ async function getAllExpenses() {
 
 async function deleteExpense(e) {
     try{
+        const token = localStorage.getItem('token');
         if(e.target.classList.contains('delete')){
             let tr = e.target.parentElement.parentElement;
             let id = tr.children[0].textContent;
@@ -137,6 +138,7 @@ async function deleteExpense(e) {
 
 async function editExpense(e) {
     try {
+      const token = localStorage.getItem('token');
       const categoryValue = document.getElementById("categoryBtn");
       const descriptionValue = document.getElementById("descriptionValue");
       const amountValue = document.getElementById("amountValue");
@@ -216,17 +218,20 @@ async function buyPremium(e){
 };
 
 
-async function isPremiumUser(){
+async function isPremiumUser() {
   const token = localStorage.getItem("token");
-  const res = await axios.get("http://localhost:3000/isPremiumUser",{headers:{Authorization:token}});
-  if(res.data.isPremiumUser){
-      buyPremiumBtn.innerHTML = "Premium Member &#128081";
-      buyPremiumBtn.removeEventListener("click", buyPremium);
-      reportsLink.removeAttribute("onclick");
-      leaderboardLink.removeAttribute("onclick");   
+  const res = await axios.get("http://localhost:3000/isPremiumUser", {
+    headers: { Authorization: token },
+  });
+  if (res.data.isPremiumUser) {
+    buyPremiumBtn.innerHTML = "Premium Member &#128081";
+    reportsLink.removeAttribute("onclick");
+    leaderboardLink.removeAttribute("onclick");
+    leaderboardLink.setAttribute("href", "/premium/getLeaderboardPage");
+    buyPremiumBtn.removeEventListener("click", buyPremium);
+  } else {
   }
 }
-
 buyPremiumBtn.addEventListener("click", buyPremium);
 document.addEventListener("DOMContentLoaded", () => {
   isPremiumUser();
