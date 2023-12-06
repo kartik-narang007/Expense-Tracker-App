@@ -3,6 +3,7 @@ const { Op } = require('sequelize');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const path = require("path");
+const sequelize = require('../Utils/Database');
 
 function generateAccessToken(id,email){
     return jwt.sign(
@@ -84,11 +85,29 @@ async function getLogin(req,res){
     }
 }
 
+const getAllUsers = (req, res, next) => {
+    console.log("Entered In getUserController");
+    user.findAll({
+      attributes: [
+        [sequelize.col("name"), "name"],
+        [sequelize.col("totalExpenses"), "totalExpenses"],
+      ],
+      order: [[sequelize.col("totalExpenses"), "DESC"]],
+    }).then((users) => {
+      const result = users.map((user) => ({
+        name: user.getDataValue("name"),
+        totalExpenses: user.getDataValue("totalExpenses"),
+      }));
+      res.send(JSON.stringify(result));
+    });
+  };
+
 module.exports = {
     generateAccessToken,
     getLogin,
     getLoginPage,
     postUserSignUp,
     validateEmail,
-    isPremiumUser
+    isPremiumUser,
+    getAllUsers
 }

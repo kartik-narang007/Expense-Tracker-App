@@ -1,31 +1,44 @@
 const Expense = require("../Model/Expense");
 const db = require('../Utils/Database');
 const path = require('path');
+const User = require('../Model/User');
 
 
 exports.getHomePage = (req, res, next) => {
     res.sendFile(path.join(__dirname, "../", "Frontend", "Expense-Details", "index.html"));
   };
 
-exports.addExpense = async (req,res,next)=>{
+exports.addExpense = (req,res,next)=>{
     const date = req.body.date;
     const category = req.body.category;
     const description = req.body.description;
     const amount = req.body.amount;
-    try{
-    await Expense.create({
+    console.log(amount);
+    console.log(req.user.totalExpenses);
+
+    User.update(
+        {
+            totalExpenses: req.user.totalExpenses + amount,
+        },
+        {where: { id: req.user.id}}
+    );
+
+    
+    Expense.create({
         date: date,
         category: category,
         description: description,
         amount: amount,
         userId: req.user.id
-    })
-    res.status(200);
-    res.redirect("/getHomePage");
-    }catch(err){
+    }).then((result)=>{
+        res.status(200);
+        res.redirect("/getHomePage");
+    }).catch((err)=>{
         console.log(err);
-    }
-}
+    })
+    
+};
+
 
 exports.getAllExpenses = async (req, res, next) => {
     const userId = req.user.id;
@@ -44,9 +57,17 @@ exports.deleteExpense = (req,res)=>{
     console.log(id);
     Expense.findByPk(id)
     .then((expense)=>{
-        return expense.destroy();
-    }).then((result)=>{
-        res.redirect("/getHomePage");
+        console.log(expense.amount)
+        User.update(
+            {
+                totalExpenses: req.user.totalExpenses - expense.amount,
+            },
+            { where: { id: req.user.id}}
+        ).then()
+    })
+    Expense.destroy({ where: { id: id, userId: req.user.id } })
+    .then((result) => {
+      res.redirect("/getHomePage");
     })
     .catch((err)=>{
         console.log(err);
@@ -60,15 +81,15 @@ exports.editExpense = (req, res) => {
     const category = req.body.category;
     const description = req.body.description;
     const amount = req.body.amount;
-    console.log(
-      "controller main enter kar gya or yeh rhii values : ",
-      id,
-      category,
-      description,
-      amount
-    );
     Expense.findByPk(id)
-      .then((expense) => {
+    .then((expense) => {
+        User.update(
+            {
+                totalExpenses : req.user.totalExpenses - expense.amount + amount,
+            },
+            {where: { id: req.user.id}}
+        )
+
         expense.category = category;
         expense.description = description;
         expense.amount = amount;
