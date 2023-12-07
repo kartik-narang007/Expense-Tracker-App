@@ -12,19 +12,26 @@ function generateAccessToken(id,email){
     );
 };
 
-function isPremiumUser(req, res, next){
-    if (req.user.isPremiumUser) {
-      return res.json({ isPremiumUser: true });
+const isPremiumUser = async (req, res, next)=>{
+    try {
+        if (req.user.isPremiumUser) {
+                return res.json({ isPremiumUser: true });
+        }
+    }catch(error){
+        console.log(error);
     }
   };
 
-function getLoginPage(req,res,next){
-    res.sendFile(path.join(__dirname, "../","Frontend","signin", "index.html"));
+const getLoginPage = (req,res,next)=>{
+    try{
+        res.sendFile(path.join(__dirname, "../","Frontend","signin", "index.html"));
+    }catch(error){
+        console.log(error);
+    }
+        
 };
 
-async function postUserSignUp(req,res){
-
-    console.log(req.body);
+const postUserSignUp = async (req,res)=>{
     try{
         const name =  req.body.name;
         const email =  req.body.email;
@@ -85,21 +92,25 @@ async function getLogin(req,res){
     }
 }
 
-const getAllUsers = (req, res, next) => {
-    console.log("Entered In getUserController");
-    user.findAll({
-      attributes: [
-        [sequelize.col("name"), "name"],
-        [sequelize.col("totalExpenses"), "totalExpenses"],
-      ],
-      order: [[sequelize.col("totalExpenses"), "DESC"]],
-    }).then((users) => {
-      const result = users.map((user) => ({
-        name: user.getDataValue("name"),
-        totalExpenses: user.getDataValue("totalExpenses"),
-      }));
-      res.send(JSON.stringify(result));
-    });
+const getAllUsers = async (req, res, next) => {
+    
+    try{
+        user.findAll({
+        attributes: [
+            [sequelize.col("name"), "name"],
+            [sequelize.col("totalExpenses"), "totalExpenses"],
+        ],
+        order: [[sequelize.col("totalExpenses"), "DESC"]],
+        }).then((users) => {
+        const result = users.map((user) => ({
+            name: user.getDataValue("name"),
+            totalExpenses: user.getDataValue("totalExpenses"),
+        }));
+        res.send(JSON.stringify(result));
+        })
+    }catch(err){
+        console.log(err);
+    }
   };
 
 module.exports = {

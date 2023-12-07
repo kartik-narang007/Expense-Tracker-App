@@ -33,7 +33,7 @@ expenses.belongsTo(user);
 user.hasMany(order);
 order.belongsTo(user);
 
-sequelize.sync().then(()=>{
+sequelize.sync({force:true}).then(()=>{
     app.listen(3000, ()=>{
         console.log('server is running on localhost : 3000');
     })

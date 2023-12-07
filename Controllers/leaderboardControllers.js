@@ -3,10 +3,14 @@ const User = require("../Model/User");
 const Expense = require("../Model/Expense");
 const sequelize = require("../Utils/Database");
 
-exports.getLeaderboardPage = (req, res, next) => {
-  res.sendFile(
-    path.join(__dirname, "../", "Frontend", "LeaderBoard", "leaderboard.html")
-  );
+exports.getLeaderboardPage = async (req, res, next) => {
+  try {
+    res.sendFile(
+      path.join(__dirname, "../", "Frontend", "LeaderBoard", "leaderboard.html")
+    );
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 
@@ -34,4 +38,3 @@ exports.getLeaderboardPage = (req, res, next) => {
 //       })
 //       .catch((err) => console.log(err));
 //   };
-  
