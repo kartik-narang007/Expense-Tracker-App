@@ -11,7 +11,4 @@ router.get('/validate-email/:email', userControllers.validateEmail);
 router.get('/getAllUsers', userControllers.getAllUsers);
 router.post('/getLogin', userControllers.getLogin);
 router.get("/isPremiumUser", userAuthentication, userControllers.isPremiumUser);
-router.get("/resetPasswordPage", userControllers.resetPasswordPage);
-router.post("/sendMail", userControllers.sendMail);
-
 module.exports = router;

@@ -112,48 +112,6 @@ const getAllUsers = async (req, res, next) => {
         console.log(err);
     }
   };
-
-const resetPasswordPage = async (req,res,next) =>{
-    try{
-        res.status(200).sendFile(
-            path.join(__dirname, "../", "Frontend", "Reset-Password", "index.html")
-        )
-    }catch(err){
-        console.log(err);
-    }
-}
-
-const sendMail = async (req,res,next)=>{
-    try{
-        const client = Sib.ApiClient.instance;
-        const apiKey = client.authentications["api-key"];
-        apiKey.apiKey = process.env.RESET_PASSWORD_API_KEY;
-        const transEmailApi = new Sib.TransactionalEmailsApi();
-        const sender = {
-            email: "narangk007@gmail.com",
-            Name: "Kartik Narang",
-        }
-        const receivers = [
-            {
-                email : req.body.email,
-            }
-        ];
-        const emailResponse =   await transEmailApi
-        .sendTransacEmail({
-            sender,
-            To: receivers,
-            subject: "Expense Tracker Reset Password",
-            textContent: "Link Below",
-        });
-        res.send(
-            `<script>alert('Check your mails, Link for reset the password is successfully send on your Mail Id!'); window.location.href='/'</script>`
-        );
-        res.redirect("/");
-    }catch(err){
-        console.log(err);
-    }
-}
-
 module.exports = {
     generateAccessToken,
     getLogin,
@@ -162,6 +120,4 @@ module.exports = {
     validateEmail,
     isPremiumUser,
     getAllUsers,
-    resetPasswordPage,
-    sendMail
 }

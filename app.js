@@ -6,6 +6,7 @@ const userRoutes = require('./Routes/userRoutes');
 const expenseRoutes = require('./Routes/expenseRoutes');
 const purchaseRoutes = require('./Routes/purchaseRoutes');
 const leaderboardRoutes = require('./Routes/leaderboardRoutes');
+const resetPasswordRoutes = require('./Routes/resetPasswordRoutes');
 const sequelize = require('./Utils/Database');
 
 const cors = require('cors');
@@ -13,6 +14,7 @@ const cors = require('cors');
 const user = require('./Model/User');
 const expenses = require('./Model/Expense');
 const order = require('./Model/Orders');
+const ResetPassword = require("./Model/resetPasswordModel");
 
 const app = express();
 
@@ -27,11 +29,15 @@ app.use("/getHomePage", expenseRoutes);
 app.use(expenseRoutes);
 app.use('/purchase', purchaseRoutes);
 app.use('/premium', leaderboardRoutes);
+app.use(resetPasswordRoutes);
 user.hasMany(expenses);
 expenses.belongsTo(user);
 
 user.hasMany(order);
 order.belongsTo(user);
+
+ResetPassword.belongsTo(user);
+user.hasMany(ResetPassword);
 
 sequelize.sync().then(()=>{
     app.listen(3000, ()=>{
