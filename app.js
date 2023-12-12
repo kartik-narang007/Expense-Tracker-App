@@ -15,7 +15,7 @@ const user = require('./Model/User');
 const expenses = require('./Model/Expense');
 const order = require('./Model/Orders');
 const ResetPassword = require("./Model/resetPasswordModel");
-
+const reportsRoutes = require('./Routes/reportsRoutes');
 const app = express();
 
 app.use(express.static("Frontend"));
@@ -30,6 +30,7 @@ app.use(expenseRoutes);
 app.use('/purchase', purchaseRoutes);
 app.use('/premium', leaderboardRoutes);
 app.use(resetPasswordRoutes);
+app.use(reportsRoutes);
 user.hasMany(expenses);
 expenses.belongsTo(user);
 

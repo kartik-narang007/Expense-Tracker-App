@@ -228,6 +228,7 @@ async function isPremiumUser() {
     reportsLink.removeAttribute("onclick");
     leaderboardLink.removeAttribute("onclick");
     leaderboardLink.setAttribute("href", "/premium/getLeaderboardPage");
+    reportsLink.setAttribute("href", "/getReportsPage");
     buyPremiumBtn.removeEventListener("click", buyPremium);
   } else {
   }
