@@ -51,7 +51,7 @@ async function addExpense(){
         const formattedDay = day < 10 ? `0${day}` : day;
         const formattedMonth = month < 10 ? `0${month}` : month;
 
-        const dateStr = `${formattedDay} - ${formattedMonth} - ${year}`;
+        const dateStr = `${formattedDay}-${formattedMonth}-${year}`;
 
         console.log(dateStr);
 
