@@ -65,6 +65,26 @@ exports.getAllExpenses = async (req, res, next) => {
     }
 }
 
+exports.getAllExpensesforPagination = async (req, res, next) => {
+    try {
+        const pageNo = req.params.page;
+        const limit = 10;
+        const offset = (pageNo - 1) * limit;
+        const totalExpenses = await Expense.count({
+            where: { userId: req.user.id },
+        });
+        const totalPages = Math.ceil(totalExpenses / limit);
+        const expenses = await Expense.findAll({
+            where: { userId: req.user.id },
+            offset: offset,
+            limit: limit,
+        });
+        res.json({ expenses: expenses, totalPages: totalPages });
+    } catch (err) {
+        console.log(err);
+    }
+};
+
 exports.deleteExpense = async (req, res) => {
     const id = req.params.id;
     console.log(id);
@@ -112,7 +132,7 @@ exports.editExpense = async (req, res) => {
                 description: description,
                 amount: amount,
             },
-            { where: {id: id, userId: req.user.id} }
+            { where: { id: id, userId: req.user.id } }
         );
         res.redirect('/getHomePage');
     } catch (err) {

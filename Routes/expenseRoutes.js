@@ -24,4 +24,10 @@ router.post(
   userAuthentication,
   expenseControllers.editExpense
 );
+router.get(
+  "/getAllExpenses/:page",
+  userAuthentication,
+  expenseControllers.getAllExpensesforPagination
+);
+
 module.exports = router;
