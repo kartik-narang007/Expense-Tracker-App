@@ -2,6 +2,7 @@ const categoryItems = document.querySelectorAll(".dropdown-item");
 const categoryInput = document.querySelector("#categoryInput");
 const categoryBtn = document.querySelector("#categoryBtn");
 const tbody = document.getElementById("tbodyId");
+const logOutBtn = document.getElementById('logoutBtn');
 
 categoryItems.forEach((item) => {
     item.addEventListener("click", (e) => {
@@ -39,5 +40,14 @@ categoryItems.forEach((item) => {
     });
   }
   
+  async function logout() {
+    try {
+      localStorage.clear();
+      window.location.href = "/";
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   document.addEventListener("DOMContentLoaded", getLeaderboard);
-  
+  logOutBtn.addEventListener("click", logout);

@@ -7,6 +7,7 @@ const table = document.getElementById('tbodyId');
 const buyPremiumBtn = document.getElementById("rzp-button1");
 const reportsLink = document.getElementById("reportsLink");
 const leaderboardLink = document.getElementById("leaderboardLink");
+const logoutBtn = document.getElementById("logoutBtn");
 //added category selection in dropdown menu and storing selected category
 
 categoryItems.forEach((item) => {
@@ -324,8 +325,19 @@ async function isPremiumUser() {
   } else {
   }
 }
+
+async function logOut(){
+  try{
+    localStorage.clear();
+    window.location.href = '/'
+  }catch(err){
+    console.log(err);
+  }
+}
+
 buyPremiumBtn.addEventListener("click", buyPremium);
 document.addEventListener("DOMContentLoaded", () => {
   isPremiumUser();
   getAllExpenses();
 });
+logoutBtn.addEventListener('click', logOut);
