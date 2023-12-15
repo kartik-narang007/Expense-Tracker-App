@@ -8,7 +8,7 @@ const Sib = require("sib-api-v3-sdk");
 function generateAccessToken(id,email){
     return jwt.sign(
         {userid: id, email: email},
-        "secretKey"
+        process.env.TOKEN
     );
 };
 
